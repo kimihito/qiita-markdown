@@ -700,5 +700,32 @@ describe Qiita::Markdown::Processor do
         EOS
       end
     end
+
+    context 'with additional_emoji_names and emoji_url context' do
+      before do
+        context[:additional_emoji_names] = %w(@yaotti @qiitan)
+
+        context[:emoji_url] = proc do |emoji_name|
+          if emoji_name.start_with?('@')
+            "https://example.com/#{emoji_name.sub(/^@/, '')}.png"
+          else
+            nil # Fall back to the default URL generator
+          end
+        end
+      end
+
+      let(:markdown) do
+        <<-EOS.strip_heredoc
+          :@qiitan:
+        EOS
+      end
+
+      it "replaces the additional emoji names with img elements with custom URL" do
+        should include(
+          '<img class="emoji" title=":@qiitan:" alt=":@qiitan:" ' \
+          'src="https://example.com/qiitan.png" height="20" width="20" align="absmiddle">'
+        )
+      end
+    end
   end
 end
