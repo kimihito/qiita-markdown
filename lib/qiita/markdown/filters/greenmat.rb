@@ -13,7 +13,7 @@ module Qiita
         # @return [Greenmat::Markdown]
         def greenmat
           @renderer ||= ::Greenmat::Markdown.new(
-            Qiita::Markdown::Greenmat::HTMLRenderer.new(hard_wrap: true, with_toc_data: true),
+            Qiita::Markdown::Greenmat::HTMLRenderer.new(hard_wrap: true, with_toc_data: false),
             autolink: true,
             fenced_code_blocks: true,
             footnotes: true,
